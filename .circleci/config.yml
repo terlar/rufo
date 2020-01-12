@@ -96,6 +96,14 @@ jobs:
           BUNDLE_JOBS: "3"
           BUNDLE_RETRY: "3"
           BUNDLE_PATH: vendor/bundle
+  notify_coveralls:
+    docker:
+      - image: circleci/ruby:2.7.0
+    steps:
+      - run:
+          name: Upload to coveralls
+          command: curl https://coveralls.io/webhook?repo_token=$COVERALLS_REPO_TOKEN
+
 workflows:
   version: 2
   test:
@@ -105,3 +113,10 @@ workflows:
       - build-2-6-1
       - build-2-5-3
       - build-2-4-5
+      - notify_coveralls:
+          requires:
+            - build-2-7-0
+            - build-2-6-3
+            - build-2-6-1
+            - build-2-5-3
+            - build-2-4-5

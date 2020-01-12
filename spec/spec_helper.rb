@@ -1,4 +1,6 @@
 require "bundler/setup"
+require "coveralls"
+Coveralls.wear!
 require "rufo"
 require "byebug"
 
