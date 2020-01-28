@@ -105,8 +105,18 @@ jobs:
     docker:
       - image: circleci/ruby:2.7.0
     steps:
+      - checkout
+      # Which version of ruby?
+      - run:
+          name: Which ruby?
+          command: ruby --version | tee ruby-version-for-ci.txt
+
+          # Restore bundle cache
+      - restore_cache:
+          keys:
+            - bundler-packages-v2-{{ checksum "ruby-version-for-ci.txt" }}-{{ checksum "rufo.gemspec" }}-{{ checksum "bin/verify-sample-code" }}
       - attach_workspace:
-          at: "coverage"
+          at: "."
       - run:
           command: ls -al coverage
       - run:
