@@ -4,8 +4,11 @@ require "coveralls"
 
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
   SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter,
 ])
+if ENV["CI"] == "true"
+  SimpleCov.command_name "rspec#{ENV.fetch("CIRCLE_WORKFLOW_ID")}"
+  SimpleCov.coverage_dir("coverage/ruby-#{RUBY_VERSION}")
+end
 SimpleCov.start
 require "rufo"
 require "byebug"
